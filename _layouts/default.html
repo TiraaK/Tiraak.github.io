@@ -1,36 +1,60 @@
 ---
+layout: compress
+# Default layout
+# v2.0
+# https://github.com/cotes2020/jekyll-theme-chirpy
+# © 2017-2019 Cotes Chung
+# MIT Licensed
 ---
 
-<!doctype html>
-{% include copyright.html %}
-<html lang="{{ site.locale | replace: "_", "-" | default: "en" }}" class="no-js">
-  <head>
-    {% include head.html %}
-    {% include head/custom.html %}
-  </head>
+<!DOCTYPE html>
 
-  <body class="layout--{{ page.layout | default: layout.layout }}{% if page.classes or layout.classes %}{{ page.classes | default: layout.classes | join: ' ' | prepend: ' ' }}{% endif %}" dir="{% if site.rtl %}rtl{% else %}ltr{% endif %}">
-    {% include_cached skip-links.html %}
-    {% include_cached masthead.html %}
+{% capture prefer_mode %}
+  {% if site.theme_mode != "dual" %}
+    mode="{{ site.theme_mode }}"
+  {% endif %}
+{% endcapture %}
 
-    <div class="initial-content">
-      {{ content }}
-      {% include after-content.html %}
+<html lang="en" {{ prefer_mode }} >
+
+  {% include head.html %}
+
+  <body data-spy="scroll" data-target="#toc">
+
+    <div id="sidebar" class="d-flex flex-column">
+      {% include sidebar.html %}
     </div>
 
-    {% if site.search == true %}
-      <div class="search-content">
-        {% include_cached search/search_form.html %}
+    {% include topbar.html %}
+
+    <div id="main-wrapper">
+      <div id="main">
+
+        {% capture _content %}
+          {{ content }}
+        {% endcapture %}
+
+        {% include fixlinenos.html %}
+        {{ _content }}
+
+        {% include footer.html %}
       </div>
+      {% include search-results.html %}
+
+    </div> <!-- #main-wrapper -->
+
+    <div id="mask"></div>
+
+    <a id="back-to-top" href="#" class="btn btn-lg btn-box-shadow" role="button">
+      <i class="fas fa-angle-up"></i>
+    </a>
+
+    {% if jekyll.environment == 'production' %}
+      {% include google-analytics.html %}
     {% endif %}
 
-    <div id="footer" class="page__footer">
-      <footer>
-        {% include footer/custom.html %}
-        {% include_cached footer.html %}
-      </footer>
-    </div>
+    {% include search-loader.html %}
 
-    {% include scripts.html %}
   </body>
+
 </html>
